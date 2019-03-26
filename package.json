@@ -10,9 +10,12 @@
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "node-fetch": "^2.3.0",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
     "pg": "^7.9.0",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
+    "react-router-dom": "^5.0.0",
     "react-scripts": "2.1.8",
     "sequelize": "^5.1.0"
   },

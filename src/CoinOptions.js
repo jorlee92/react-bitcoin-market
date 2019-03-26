@@ -22,7 +22,6 @@ class CoinOptions extends Component {
     };
   }
   componentDidMount(){
-    console.log("Mounted")
     Axios.get('http://localhost:3000/prices')
     .then(results => {
       //We want it to be an array so we can map over it.

@@ -9,7 +9,6 @@ router.get('/loadCoinsToDB', (req, res ) => {
     cc.priceMulti(['BTC', 'ETH','XRP','LTC','EOS','BCH','USDT'], ['USD'])
     .then(prices => {
         const keys = Object.keys(prices);
-        console.log(keys);
         keys.forEach( coin => {
             models.currency.create({name: coin})
         })
@@ -22,7 +21,7 @@ router.get('/createFakeBuys', (req, res) => {
     models.holding.create({
         quantity: 100,
         currencyId: 1,
-        userId:1
+        userId:2
     })
     .then(rs => res.send(rs))
     .catch(err => res.send(err))
@@ -30,5 +29,8 @@ router.get('/createFakeBuys', (req, res) => {
 
 router.get('/fakeUser', (req, res) => {
     models.user.create({firstName:"Jordan", lastName:"Lee", email:"test@.com", password: "password"}).then(d => res.send(d));
+  })
+  router.get('/fakeUser2', (req, res) => {
+    models.user.create({firstName:"Sarah", lastName:"Smith", email:"test@.com", password: "password"}).then(d => res.send(d));
   })
 module.exports = router;

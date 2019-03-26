@@ -24,7 +24,6 @@ router.post('/buyCoin', async (req, res) => {
     const userID = 1;
     const user_requested_amount = req.body.amount;
     const user_requested_coin = req.body.coin;
-    console.log(user_requested_coin)
     let price = await cc.price(user_requested_coin, ['USD']).catch(err => res.send(err))
     price = price.USD; //Set the price equal to just the USD part of the response.
     const totalPrice = price * user_requested_amount;
@@ -32,7 +31,6 @@ router.post('/buyCoin', async (req, res) => {
     const user = await models.user.findOne({id: userID}) //Returns a full reference to the user
     if(user.dataValues.dollars > totalPrice){
         //Make the purchase, and keep track of it.
-        console.log("Adding " + constants.ids[user_requested_coin] )
         const newHolding = await models.holding.create({
             quantity: user_requested_amount,
             currencyId: constants.ids[user_requested_coin],
@@ -52,4 +50,31 @@ router.post('/buyCoin', async (req, res) => {
     }
 })
 
+router.get('/leaderBoard',async (req, res) => {
+    let price = await cc.priceMulti(['BTC', 'ETH','XRP','LTC','EOS','BCH','USDT'], ['USD']).catch(err => res.send(err))
+    models.holding.findAll({ 
+        attributes: [[models.sequelize.fn('sum', models.sequelize.col('quantity')), 'quantity']],
+        group : ['user.id','currency.id'],
+        include:
+            [models.currency, models.user],
+        })
+    .then(results => {
+        //Could be a lot better, but the queries would have to be way different.
+        const lbObj = {};
+        results.forEach(entry => {
+            if(lbObj[entry.user.id]){
+                const currentItem = lbObj[entry.user.id];
+                currentItem.totalPortfolioValue += (price[entry.currency.name].USD * entry.quantity)
+            }
+            else {lbObj[entry.user.id] = {
+                totalPortfolioValue: (price[entry.currency.name].USD * entry.quantity),
+                firstName: entry.user.firstName,
+                email: entry.user.email,
+            }
+        }
+        })
+        res.send(lbObj)
+    })
+
+})
 module.exports = router;

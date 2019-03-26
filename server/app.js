@@ -7,7 +7,8 @@ const pricesRoutes = require('./routes/prices');
 const holdingRoutes = require('./routes/holdings');
 const actionRoutes = require('./routes/action');
 const historyRoutes = require('./routes/history')
-
+const loginRoutes = require('./routes/login');
+const passport = require('passport')
 const models = require('./models');
 const session = require('express-session')
 require('dotenv').config();
@@ -17,6 +18,9 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
 }))
+app.use(passport.initialize());
+app.use(passport.session());
+
 // app.use(express.static(path.join(__dirname, '../public/')));
 app.use(bodyParser.json());
 // Route definitions
@@ -26,6 +30,7 @@ app.use('/prices',pricesRoutes);
 app.use('/holdings', holdingRoutes);
 app.use('/action', actionRoutes);
 app.use('/history', historyRoutes);
+app.use('/profile', loginRoutes);
 
 models.sequelize
   .authenticate()

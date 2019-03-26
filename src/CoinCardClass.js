@@ -35,7 +35,7 @@ class CoinCardClass extends Component {
         if(NUMBER > 0){
             Axios.post('http://localhost:3000/action/buyCoin', { coin: COIN_NAME, amount: NUMBER})
             .then(result => console.log(result))
-    }
+      }
     }
     constructor(props){
         super(props)

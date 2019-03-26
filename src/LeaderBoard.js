@@ -28,23 +28,21 @@ const styles = {
 class CoinHoldings extends Component {
   constructor(props){
     super(props);
-    this.state = { holdings: [ ] }
+    this.state = { board: [ ] }
   }
   async componentDidMount(){
     const prices = await Axios.get('http://localhost:3000/prices').then( results => results.data );
 
-    Axios.get('http://localhost:3000/holdings')
+    Axios.get('http://localhost:3000/action/leaderBoard')
     .then(results => {
-      const newHoldings = results.data.map( (result,id) => {
-        const valueOfCoinHolding = prices[result.currency.name].USD * result.quantity;
-        return {
-          id: id,
-          name: result.currency.name,
-          quantity: result.quantity,
-          value: valueOfCoinHolding
-        }
+      const keys = Object.keys(results.data);
+      const newBoard = keys.map(key => {
+        console.log(key);
+        const item = results.data[key];
+        return item;
       })
-      this.setState({holdings: newHoldings})
+      console.log(newBoard)
+      this.setState({board: newBoard})
     })
   }
   render() {
@@ -53,23 +51,21 @@ class CoinHoldings extends Component {
       <Grid container className={classes.holdingtable} alignItems="center" justify="center">
         <Grid item xs={8}>
         <Typography variant="h2" gutterBottom>
-        Your Inventory
-      </Typography>
+            Leaderboard
+        </Typography>
       <Paper>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Coin</TableCell>
-              <TableCell>Quantity</TableCell>
-              <TableCell>Value</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Holdings ($USD)</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-             {this.state.holdings.map(row => (
+             {this.state.board.map(row => (
               <TableRow key={row.id}>
-                <TableCell>{row.name}</TableCell>
-                <TableCell>{row.quantity}</TableCell>
-                <TableCell>{row.value}</TableCell>
+                <TableCell>{row.firstName}</TableCell>
+                <TableCell>{row.totalPortfolioValue}</TableCell>
               </TableRow>
             ))}
           </TableBody>
