@@ -14,10 +14,14 @@ const constants = {
     }
 }
 router.get('/', async (req, res) => {
-    const userID = 1;
+    if(req.user){
+    const userID = req.user.id;
     //GET the currently logged in user's history
     const trades = await models.trade.findAll({where: { userId: userID }})
     res.send(trades)
+} else {
+    res.send({error: "you must be logged in to view this page"})
+}
 })
 
 module.exports = router;

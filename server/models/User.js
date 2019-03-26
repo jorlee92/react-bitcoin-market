@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         },
         dollars: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.DOUBLE,
             defaultValue: 10000
         }
       });

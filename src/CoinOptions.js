@@ -17,7 +17,7 @@ class CoinOptions extends Component {
   constructor(props){
     super(props);
     this.state = {
-      items: [{ name: "Fake", text: "FakeText", price: 1000 }],
+      items: [],
       style: { maxWidth: 960, margin: 'auto'}
     };
   }

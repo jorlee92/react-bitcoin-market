@@ -21,7 +21,8 @@ const constants = {
     }
 }
 router.post('/buyCoin', async (req, res) => {
-    const userID = 1;
+    if(req.user){
+    const userID = req.user.id;
     const user_requested_amount = req.body.amount;
     const user_requested_coin = req.body.coin;
     let price = await cc.price(user_requested_coin, ['USD']).catch(err => res.send(err))
@@ -29,13 +30,14 @@ router.post('/buyCoin', async (req, res) => {
     const totalPrice = price * user_requested_amount;
     //Check to make sure this is an amount that the user can buy.
     const user = await models.user.findOne({id: userID}) //Returns a full reference to the user
+    const dollars = user.get("dollars");
     if(user.dataValues.dollars > totalPrice){
         //Make the purchase, and keep track of it.
         const newHolding = await models.holding.create({
             quantity: user_requested_amount,
             currencyId: constants.ids[user_requested_coin],
             userId:userID
-        }).catch(err => res.send("Major Error! Failed to add to account"))
+        }).catch(err => res.send("Major Error! Failed to add to account", err))
         const newTrade = await models.trade.create({
             quantity: user_requested_amount,
             pricepaid: totalPrice,
@@ -45,8 +47,14 @@ router.post('/buyCoin', async (req, res) => {
 
         }).catch(err => { res.send("Major Error! Failed to log trade")})
         res.json({success: true, message: "Successfully made purchase!"})
+        const newDollars = dollars - totalPrice;
+        user.set("dollars", Math.ceil(newDollars));
+        user.save();
     } else {
         res.send("You dont have enough money for this purchase!");
+    }}
+    else {
+        res.json({error: "you must be logged in to buy coins"})
     }
 })
 

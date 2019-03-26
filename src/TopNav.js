@@ -45,13 +45,13 @@ function TopNav(props) {
               Home
             </Typography>
           </Link>
-          <Link component={RouterLink} to="/login">
-            <Button className={classes.whiteText} color="inherit">Login</Button>
+            {(!!props.userID && props.userID > 0) ? <Link component={RouterLink} to="/profile">
+            <Avatar alt="Current User" src="https://upload.wikimedia.org/wikipedia/commons/2/2e/RAS_SJohnRoss.jpg" className={classes.avatar} />
+            </Link> : 
+            <Link component={RouterLink} to="/login">
+              <Button className={classes.whiteText} color="inherit">Login</Button>
           </Link>
-          <Link component={RouterLink} to="/profile">
-            <Avatar alt="Remy Sharp" src="https://upload.wikimedia.org/wikipedia/commons/2/2e/RAS_SJohnRoss.jpg" className={classes.avatar} />
-          </Link>
-
+            }
         </Toolbar>
       </AppBar>
     </div>

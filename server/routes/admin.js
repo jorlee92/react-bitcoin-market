@@ -28,9 +28,9 @@ router.get('/createFakeBuys', (req, res) => {
 })
 
 router.get('/fakeUser', (req, res) => {
-    models.user.create({firstName:"Jordan", lastName:"Lee", email:"test@.com", password: "password"}).then(d => res.send(d));
+    models.user.create({firstName:"Jordan", lastName:"Lee", email:"test@google.com", password: "password"}).then(d => res.send(d));
   })
   router.get('/fakeUser2', (req, res) => {
-    models.user.create({firstName:"Sarah", lastName:"Smith", email:"test@.com", password: "password"}).then(d => res.send(d));
+    models.user.create({firstName:"Sarah", lastName:"Smith", email:"test@altima.com", password: "password"}).then(d => res.send(d));
   })
 module.exports = router;

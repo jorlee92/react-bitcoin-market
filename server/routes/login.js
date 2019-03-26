@@ -36,11 +36,11 @@ passport.serializeUser(async function(user, done) {
 
 router.get('/', (req, res) => {
     if(req.isAuthenticated()){
-        res.send(req.user)
+        res.json({userID: req.user.id})
     } else {
         res.send("You must be logged in to view your profile")
     }
 })
 
-router.post('/', passport.authenticate('local', { successRedirect: '/profile', failureRedirect: '/login' }));
+router.post('/login', passport.authenticate('local', { successRedirect: '/profile', failureRedirect: '/login' }));
 module.exports = router;
