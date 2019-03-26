@@ -34,6 +34,17 @@ passport.serializeUser(async function(user, done) {
       done(null, u)
   });
 
+router.post('/register', async (req, res) => {
+    if(req.body.email && req.body.password && req.body.first && req.body.last){
+        const email = String(req.body.email);
+        const first = String(req.body.first);
+        const last = String(req.body.last);
+        const password = String(req.body.password);
+        models.user.create({firstName:first, lastName:last, email:email, password:password}).then(d => res.send(d));
+    } else {
+        res.status(500).send("Invalid input");
+    }
+})
 router.get('/', (req, res) => {
     if(req.isAuthenticated()){
         res.json({userID: req.user.id})

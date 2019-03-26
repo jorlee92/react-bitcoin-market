@@ -58,6 +58,47 @@ router.post('/buyCoin', async (req, res) => {
     }
 })
 
+router.post('/sellCoin', async (req, res) => {
+    if(req.user){
+    const userID = req.user.id;
+    const user_requested_amount = req.body.quantity;
+    if(user_requested_amount < 0) {
+        res.send("Invalid input") //Prevent buying coins through selling negative numbers
+    } else {
+        const user_requested_coin = req.body.name;
+        let price = await cc.price(user_requested_coin, ['USD']).catch(err => res.send(err))
+        price = price.USD; //Set the price equal to just the USD part of the response.
+        const totalPrice = price * user_requested_amount;
+        const user = await models.user.findOne({id: userID}) //Returns a full reference to the user
+        const dollars = user.get("dollars");
+        if(user){
+        //Make the sale, and keep track of it.
+        const newHolding = await models.holding.create({
+            quantity: -1 * user_requested_amount,
+            currencyId: constants.ids[user_requested_coin],
+            userId:userID
+        }).catch(err => res.send("Major Error! Failed to add to account", err))
+        const newTrade = await models.trade.create({
+            quantity: -1 * user_requested_amount,
+            pricepaid: totalPrice,
+            mode: constants.modes.SELL,
+            userId: userID,
+            currencyId: constants.ids[user_requested_coin],
+
+        }).catch(err => { res.send("Major Error! Failed to log trade")})
+        res.json({success: true, message: "Successfully made sale!"})
+        const newDollars = dollars - totalPrice;
+        user.set("dollars", Math.ceil(newDollars));
+        user.save();
+        }
+    }
+    
+
+}
+    else {
+        res.json({error: "you must be logged in to sell coins"})
+    }
+})
 router.get('/leaderBoard',async (req, res) => {
     let price = await cc.priceMulti(['BTC', 'ETH','XRP','LTC','EOS','BCH','USDT'], ['USD']).catch(err => res.send(err))
     models.holding.findAll({ 

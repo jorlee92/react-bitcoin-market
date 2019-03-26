@@ -9,16 +9,9 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
+import SellBox from './SellBox';
 
 import Axios from 'axios';
-
-const fakeData = [
-  {id:1,name:"Bitcoin",quantity:5,value:5000},
-  {id:2,name:"Bitcoin",quantity:5,value:5000},
-  {id:3,name:"Bitcoin",quantity:5,value:5000},
-  {id:4,name:"Bitcoin",quantity:5,value:5000},
-
-]
 const styles = {
   holdingtable : {
     paddingBottom: 50
@@ -62,15 +55,19 @@ class CoinHoldings extends Component {
               <TableCell>Coin</TableCell>
               <TableCell>Quantity</TableCell>
               <TableCell>Value</TableCell>
+              <TableCell>Sell Coin</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
              {this.state.holdings.map(row => (
+               <>
               <TableRow key={row.id}>
                 <TableCell>{row.name}</TableCell>
                 <TableCell>{row.quantity}</TableCell>
                 <TableCell>{row.value}</TableCell>
+                <TableCell><SellBox name={row.name}></SellBox></TableCell>
               </TableRow>
+              </>
             ))}
           </TableBody>
         </Table>

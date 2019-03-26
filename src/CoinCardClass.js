@@ -34,7 +34,11 @@ class CoinCardClass extends Component {
     submitOrder(COIN_NAME, NUMBER){
         if(NUMBER > 0){
             Axios.post('/action/buyCoin', { coin: COIN_NAME, amount: NUMBER})
-            .then(result => console.log(result))
+            .then(result => { 
+            console.log(result)
+            //refresh the page, provided the request was good.
+            document.location.reload()
+            })
       }
     }
     constructor(props){

@@ -48,9 +48,16 @@ function TopNav(props) {
             {(!!props.userID && props.userID > 0) ? <Link component={RouterLink} to="/profile">
             <Avatar alt="Current User" src="https://upload.wikimedia.org/wikipedia/commons/2/2e/RAS_SJohnRoss.jpg" className={classes.avatar} />
             </Link> : 
+            <>
             <Link component={RouterLink} to="/login">
-              <Button className={classes.whiteText} color="inherit">Login</Button>
-          </Link>
+            <Typography variant="h6" color="inherit" className={classes.whiteText}>
+              Login
+            </Typography>            </Link>
+            <Link component={RouterLink} to="/register">
+            <Typography variant="h6" color="inherit" className={classes.whiteText}>
+              Register
+            </Typography>          </Link>
+          </>
             }
         </Toolbar>
       </AppBar>

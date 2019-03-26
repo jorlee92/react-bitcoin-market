@@ -4,7 +4,8 @@ import TopNav from './TopNav'
 import CoinHoldings from './CoinHoldings';
 import CoinOptions from './CoinOptions';
 import LeaderBoard from './LeaderBoard';
-import LoginForm from './LoginForm'
+import LoginForm from './LoginForm';
+import RegisterForm from './RegisterForm'
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Axios from 'axios';
 
@@ -35,6 +36,7 @@ class App extends Component {
         <Route path="/leaderboard/" component={LeaderBoard} />
         <Route path="/login" component={LoginForm} />
         <Route path="/profile" component={CoinHoldings} />
+        <Route path="/register" component={RegisterForm} />
     </Router>
       </div>
     );
