@@ -33,7 +33,7 @@ const styles = {
 class CoinCardClass extends Component {
     submitOrder(COIN_NAME, NUMBER){
         if(NUMBER > 0){
-            Axios.post('http://localhost:3000/action/buyCoin', { coin: COIN_NAME, amount: NUMBER})
+            Axios.post('/action/buyCoin', { coin: COIN_NAME, amount: NUMBER})
             .then(result => console.log(result))
       }
     }

@@ -31,9 +31,9 @@ class CoinHoldings extends Component {
     this.state = { board: [ ] }
   }
   async componentDidMount(){
-    const prices = await Axios.get('http://localhost:3000/prices').then( results => results.data );
+    const prices = await Axios.get('/prices').then( results => results.data );
 
-    Axios.get('http://localhost:3000/action/leaderBoard')
+    Axios.get('/action/leaderBoard')
     .then(results => {
       const keys = Object.keys(results.data);
       const newBoard = keys.map(key => {

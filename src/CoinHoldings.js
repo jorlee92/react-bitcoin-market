@@ -31,9 +31,9 @@ class CoinHoldings extends Component {
     this.state = { holdings: [ ] }
   }
   async componentDidMount(){
-    const prices = await Axios.get('http://localhost:3000/prices').then( results => results.data );
+    const prices = await Axios.get('/prices').then( results => results.data );
 
-    Axios.get('http://localhost:3000/holdings')
+    Axios.get('/holdings')
     .then(results => {
       const newHoldings = results.data.map( (result,id) => {
         const valueOfCoinHolding = prices[result.currency.name].USD * result.quantity;
