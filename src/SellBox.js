@@ -65,7 +65,7 @@ export default class FormDialog extends React.Component {
               Cancel
             </Button>
             <Button onClick={this.handleSell} color="primary">
-              Subscribe
+              Sell
             </Button>
           </DialogActions>
         </Dialog>
