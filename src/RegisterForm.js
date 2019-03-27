@@ -62,8 +62,9 @@ class RegisterForm extends Component {
         Axios.post('/api/profile/register', { first: first, last: last, email: email, password: password})
         .then(result => console.log(result)).then(() => {
             //Take the user to the login page, provided their request was good.
-            document.location.reload()
-            window.location = "/login"
+            // document.location.reload()
+            // window.location = "/login"
+            window.location = "/"
         })
       }
     return (

@@ -39,7 +39,11 @@ export default class FormDialog extends React.Component {
           //Refresh the page
           this.setState({snackmsg: "Item Sold!, Reloading to update", snackopen: true})
           return new Promise(resolve => setTimeout(() => resolve(), 3000));
-      }).then(() => document.location.reload()).catch(() => {
+      }).then(() => 
+      { 
+        // document.location.reload()
+        window.location = "/"
+      }).catch(() => {
         this.setState({snackmsg: "Unable to make sale!", snackopen: true})
       })
   }

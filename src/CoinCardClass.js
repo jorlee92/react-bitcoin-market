@@ -41,7 +41,8 @@ class CoinCardClass extends Component {
             return new Promise(resolve => setTimeout(() => resolve(), 3000));
             //refresh the page, provided the request was good.
             }).then(() => {
-              document.location.reload()
+              // document.location.reload()
+              window.location = "/"
             })
             .catch(() => {
               this.setState({snackmsg: "Unable to complete Purchase", snackopen: true})

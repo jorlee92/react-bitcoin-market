@@ -68,7 +68,6 @@ class CoinCardClass extends Component {
         Axios.post('/api/profile/login', { username: email, password: password})
         .then(result => console.log(result)).then(() => {
             //We need to do a refresh because data is changed on the backend, but the page doesnt pull it again until a refresh.
-            document.location.reload()
             window.location = "/"
         })
       }
