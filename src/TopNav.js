@@ -4,8 +4,6 @@ import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import Avatar from '@material-ui/core/Avatar';
 import { Link as RouterLink } from 'react-router-dom'
 import Link from '@material-ui/core/Link';
 
@@ -46,7 +44,9 @@ function TopNav(props) {
             </Typography>
           </Link>
             {(!!props.userID && props.userID > 0) ? <Link component={RouterLink} to="/profile">
-            <Avatar alt="Current User" src="https://upload.wikimedia.org/wikipedia/commons/2/2e/RAS_SJohnRoss.jpg" className={classes.avatar} />
+            <Typography variant="h6" color="inherit" className={classes.whiteText}>
+              Cash: [${props.dollars} USD]
+            </Typography>
             </Link> : 
             <>
             <Link component={RouterLink} to="/login">

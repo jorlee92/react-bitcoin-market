@@ -60,14 +60,12 @@ class CoinHoldings extends Component {
           </TableHead>
           <TableBody>
              {this.state.holdings.map(row => (
-               <>
               <TableRow key={row.id}>
                 <TableCell>{row.name}</TableCell>
                 <TableCell>{row.quantity}</TableCell>
                 <TableCell>{row.value}</TableCell>
                 <TableCell><SellBox name={row.name}></SellBox></TableCell>
               </TableRow>
-              </>
             ))}
           </TableBody>
         </Table>

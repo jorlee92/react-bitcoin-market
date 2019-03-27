@@ -29,7 +29,7 @@ router.post('/buyCoin', async (req, res) => {
     price = price.USD; //Set the price equal to just the USD part of the response.
     const totalPrice = price * user_requested_amount;
     //Check to make sure this is an amount that the user can buy.
-    const user = await models.user.findOne({id: userID}) //Returns a full reference to the user
+    const user = await models.user.findOne({where: {id: userID}}) //Returns a full reference to the user
     const dollars = user.get("dollars");
     if(user.dataValues.dollars > totalPrice){
         //Make the purchase, and keep track of it.
@@ -48,8 +48,10 @@ router.post('/buyCoin', async (req, res) => {
         }).catch(err => { res.send("Major Error! Failed to log trade")})
         res.json({success: true, message: "Successfully made purchase!"})
         const newDollars = dollars - totalPrice;
+        console.log("Setting dollars of user to " + Math.ceil(newDollars))
         user.set("dollars", Math.ceil(newDollars));
         user.save();
+        console.log("Saved user");
     } else {
         res.send("You dont have enough money for this purchase!");
     }}
@@ -69,7 +71,7 @@ router.post('/sellCoin', async (req, res) => {
         let price = await cc.price(user_requested_coin, ['USD']).catch(err => res.send(err))
         price = price.USD; //Set the price equal to just the USD part of the response.
         const totalPrice = price * user_requested_amount;
-        const user = await models.user.findOne({id: userID}) //Returns a full reference to the user
+        const user = await models.user.findOne({where:{id: userID}}) //Returns a full reference to the user
         const dollars = user.get("dollars");
         if(user){
         //Make the sale, and keep track of it.
@@ -87,7 +89,7 @@ router.post('/sellCoin', async (req, res) => {
 
         }).catch(err => { res.send("Major Error! Failed to log trade")})
         res.json({success: true, message: "Successfully made sale!"})
-        const newDollars = dollars - totalPrice;
+        const newDollars = dollars + totalPrice;
         user.set("dollars", Math.ceil(newDollars));
         user.save();
         }

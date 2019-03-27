@@ -1,7 +1,6 @@
 var models  = require('../models');
 var express = require('express');
 var router  = express.Router();
-const cc = require('cryptocompare')
 
 global.fetch = require('node-fetch')
 
@@ -47,7 +46,7 @@ router.post('/register', async (req, res) => {
 })
 router.get('/', (req, res) => {
     if(req.isAuthenticated()){
-        res.json({userID: req.user.id})
+        res.json({userID: req.user.id, dollars: req.user.dollars})
     } else {
         res.send("You must be logged in to view your profile")
     }
