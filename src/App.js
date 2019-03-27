@@ -25,7 +25,7 @@ class App extends Component {
   }
   componentDidMount(){
     //Attempt to get the current userID, if it is null we arent logged in.
-    Axios.get('/profile/').then(result => {
+    Axios.get('/api/profile/').then(result => {
       result.data.userID ? this.changeData(result.data.userID, result.data.dollars) : console.log("User does not appear to be logged in");
     }).catch(err => console.log(err))
   }

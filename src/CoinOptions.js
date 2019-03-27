@@ -22,7 +22,7 @@ class CoinOptions extends Component {
     };
   }
   componentDidMount(){
-    Axios.get('/prices')
+    Axios.get('/api/prices')
     .then(results => {
       //We want it to be an array so we can map over it.
       const itemsNew = Object.keys(results.data).map( key => {

@@ -52,5 +52,5 @@ router.get('/', (req, res) => {
     }
 })
 
-router.post('/login', passport.authenticate('local', { successRedirect: '/profile', failureRedirect: '/login' }));
+router.post('/login', passport.authenticate('local', { successRedirect: '/api/profile', failureRedirect: '/api/login' }));
 module.exports = router;
