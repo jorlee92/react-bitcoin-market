@@ -51,7 +51,7 @@ const styles = theme => ({
 function SignIn(props) {
   const { classes } = props;
   const submitLogin = (email, password) => {
-	Axios.post('/profile/login', { username: email, password: password})
+	Axios.post('/api/profile/login', { username: email, password: password})
 	.then(result => console.log(result))
   }
   return (

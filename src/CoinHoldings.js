@@ -24,7 +24,7 @@ class CoinHoldings extends Component {
     this.state = { holdings: [ ] }
   }
   async componentDidMount(){
-    const prices = await Axios.get('/prices').then( results => results.data );
+    const prices = await Axios.get('/api/prices').then( results => results.data );
 
     Axios.get('/holdings')
     .then(results => {

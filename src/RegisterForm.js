@@ -59,7 +59,7 @@ class RegisterForm extends Component {
   render(){
     const { classes } = this.props;
     const submitReg = (first, last, email, password) => {
-        Axios.post('/profile/register', { first: first, last: last, email: email, password: password})
+        Axios.post('/api/profile/register', { first: first, last: last, email: email, password: password})
         .then(result => console.log(result)).then(() => {
             //Take the user to the login page, provided their request was good.
             document.location.reload()
