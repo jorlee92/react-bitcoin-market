@@ -38,7 +38,7 @@ class CoinHoldings extends Component {
   async componentDidMount(){
     const prices = await Axios.get('/api/prices').then( results => results.data );
 
-    Axios.get('/action/leaderBoard')
+    Axios.get('/api/action/leaderBoard')
     .then(results => {
       const keys = Object.keys(results.data);
       const newBoard = keys.map(key => {
