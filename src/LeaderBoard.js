@@ -12,18 +12,23 @@ import Paper from '@material-ui/core/Paper';
 
 import Axios from 'axios';
 
-const fakeData = [
-  {id:1,name:"Bitcoin",quantity:5,value:5000},
-  {id:2,name:"Bitcoin",quantity:5,value:5000},
-  {id:3,name:"Bitcoin",quantity:5,value:5000},
-  {id:4,name:"Bitcoin",quantity:5,value:5000},
-
-]
 const styles = {
   holdingtable : {
     paddingBottom: 50
   }
 }
+const sortByAmount = (function makeSortByAmount(){
+  function compare(a,b) {
+      if (a.totalPortfolioValue > b.totalPortfolioValue)
+        return -1;
+      if (a.totalPortfolioValue < b.totalPortfolioValue)
+        return 1;
+      return 0;
+  }
+  return (arr) => {
+      arr.sort(compare);
+  } 
+})()
 
 class CoinHoldings extends Component {
   constructor(props){
@@ -42,6 +47,8 @@ class CoinHoldings extends Component {
         return item;
       })
       console.log(newBoard)
+      sortByAmount(newBoard)
+      console.log(newBoard)
       this.setState({board: newBoard})
     })
   }
@@ -58,7 +65,7 @@ class CoinHoldings extends Component {
           <TableHead>
             <TableRow>
               <TableCell>Name</TableCell>
-              <TableCell>Holdings ($USD)</TableCell>
+              <TableCell>Portfolio Value (Crypto and Cash)</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

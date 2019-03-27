@@ -38,7 +38,7 @@ class CoinOptions extends Component {
   render() {
     return (
       <Grid container style={this.state.style}  alignItems="center" spacing={16} justify="center">
-      
+      <iframe style={{marginTop:"3%"}}title="news" src="https://feed.mikle.com/widget/v2/105716/" height="353px" width="100%" class="fw-iframe" scrolling="no" frameborder="0"></iframe>
       { this.state.items.map( (item, idx)  => {
         const image = images[item.name];
         return ( 

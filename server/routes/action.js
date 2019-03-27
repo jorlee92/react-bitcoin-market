@@ -53,10 +53,10 @@ router.post('/buyCoin', async (req, res) => {
         user.save();
         console.log("Saved user");
     } else {
-        res.send("You dont have enough money for this purchase!");
+        res.status(401).send("You dont have enough money for this purchase!");
     }}
     else {
-        res.json({error: "you must be logged in to buy coins"})
+        res.status(401).json({error: "you must be logged in to buy coins"})
     }
 })
 
@@ -71,9 +71,22 @@ router.post('/sellCoin', async (req, res) => {
         let price = await cc.price(user_requested_coin, ['USD']).catch(err => res.send(err))
         price = price.USD; //Set the price equal to just the USD part of the response.
         const totalPrice = price * user_requested_amount;
+        const holdings = await models.holding.findAll(
+            { 
+                attributes: [[models.sequelize.fn('sum', models.sequelize.col('quantity')), 'quantity']],
+                group : ['currency.id'],
+                where: {userId: userID},include:[models.currency],})
+
+                let hasEnough = false;
+                holdings.forEach(h => {
+                    if(h.currency.name == user_requested_coin && h.quantity > user_requested_amount){
+                        console.log("User has enough money!")
+                        hasEnough = true;
+                    }
+                })
         const user = await models.user.findOne({where:{id: userID}}) //Returns a full reference to the user
         const dollars = user.get("dollars");
-        if(user){
+        if(user && hasEnough){
         //Make the sale, and keep track of it.
         const newHolding = await models.holding.create({
             quantity: -1 * user_requested_amount,
@@ -87,18 +100,21 @@ router.post('/sellCoin', async (req, res) => {
             userId: userID,
             currencyId: constants.ids[user_requested_coin],
 
-        }).catch(err => { res.send("Major Error! Failed to log trade")})
+        }).catch(err => { res.status(401).json({success: true, message: "Successfully made sale!"})})
         res.json({success: true, message: "Successfully made sale!"})
         const newDollars = dollars + totalPrice;
         user.set("dollars", Math.ceil(newDollars));
         user.save();
+        }
+        else {
+            res.status(401).json({success: false, message: "Failed to complete sale"})
         }
     }
     
 
 }
     else {
-        res.json({error: "you must be logged in to sell coins"})
+        res.status(401).json({error: "you must be logged in to sell coins"})
     }
 })
 router.get('/leaderBoard',async (req, res) => {
@@ -117,10 +133,11 @@ router.get('/leaderBoard',async (req, res) => {
                 const currentItem = lbObj[entry.user.id];
                 currentItem.totalPortfolioValue += (price[entry.currency.name].USD * entry.quantity)
             }
-            else {lbObj[entry.user.id] = {
-                totalPortfolioValue: (price[entry.currency.name].USD * entry.quantity),
-                firstName: entry.user.firstName,
-                email: entry.user.email,
+            else {
+                lbObj[entry.user.id] = {
+                    totalPortfolioValue: (price[entry.currency.name].USD * entry.quantity) + entry.user.dollars,
+                    firstName: entry.user.firstName,
+                    email: entry.user.email,
             }
         }
         })

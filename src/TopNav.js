@@ -27,6 +27,10 @@ const styles = {
   }
 };
 
+function LoggedInRender(id, renderIfTrue, renderIfFalse){
+  return id? renderIfTrue : renderIfFalse;
+}
+
 function TopNav(props) {
   const { classes } = props;
   return (
@@ -59,6 +63,7 @@ function TopNav(props) {
             </Typography>          </Link>
           </>
             }
+
         </Toolbar>
       </AppBar>
     </div>

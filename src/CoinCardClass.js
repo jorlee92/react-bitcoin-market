@@ -10,6 +10,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
+import Snackbar from '@material-ui/core/Snackbar';
 
 import { Component } from 'react';
 import Axios from 'axios';
@@ -36,15 +37,26 @@ class CoinCardClass extends Component {
             Axios.post('/action/buyCoin', { coin: COIN_NAME, amount: NUMBER})
             .then(result => { 
             console.log(result)
+            this.setState({snackmsg: "Purchase Successful, reloading page", snackopen: true})
+            return new Promise(resolve => setTimeout(() => resolve(), 3000));
             //refresh the page, provided the request was good.
-            document.location.reload()
+            }).then(() => {
+              document.location.reload()
+            })
+            .catch(() => {
+              this.setState({snackmsg: "Unable to complete Purchase", snackopen: true})
             })
       }
+    }
+    handlesnackClose= () => {
+      this.setState({snackopen: false})
     }
     constructor(props){
         super(props)
         this.state = {
             amount:0,
+            snackopen: false,
+            snackmsg: "Purchase Successful, reloading page"
         };
     }
   render(){
@@ -83,6 +95,19 @@ class CoinCardClass extends Component {
             </Button>
           </CardActions>
         </Card>
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          open={this.state.snackopen}
+          autoHideDuration={6000}
+          onClose={this.handlesnackClose}
+          ContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          message={<span id="message-id">{this.state.snackmsg}</span>}
+        />
         </Paper>
       );
   }

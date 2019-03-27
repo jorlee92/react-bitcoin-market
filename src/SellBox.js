@@ -6,11 +6,16 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 import Axios from 'axios';
 export default class FormDialog extends React.Component {
   state = {
     open: false,
     number:0.0,
+    snackopen: false,
+    snackmsg: "",
   };
 
   handleClickOpen = () => {
@@ -20,6 +25,9 @@ export default class FormDialog extends React.Component {
   handleClose = () => {
     this.setState({ open: false });
   };
+  handlesnackClose= () => {
+    this.setState({snackopen: false})
+  }
 
   handleSell = () => {
       console.log("Selling ", this.state.number, " units of ", this.props.name)
@@ -29,10 +37,13 @@ export default class FormDialog extends React.Component {
           quantity: this.state.number,
       }).then(() => {
           //Refresh the page
-          document.location.reload()
+          this.setState({snackmsg: "Item Sold!, Reloading to update", snackopen: true})
+          return new Promise(resolve => setTimeout(() => resolve(), 3000));
+      }).then(() => document.location.reload()).catch(() => {
+        this.setState({snackmsg: "Unable to make sale!", snackopen: true})
       })
   }
-
+  
   render() {
     return (
       <div>
@@ -69,6 +80,19 @@ export default class FormDialog extends React.Component {
             </Button>
           </DialogActions>
         </Dialog>
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          open={this.state.snackopen}
+          autoHideDuration={6000}
+          onClose={this.handlesnackClose}
+          ContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          message={<span id="message-id">{this.state.snackmsg}</span>}
+        />
       </div>
     );
   }

@@ -46,7 +46,7 @@ class CoinHoldings extends Component {
       <Grid container className={classes.holdingtable} alignItems="center" justify="center">
         <Grid item xs={8}>
         <Typography variant="h2" gutterBottom>
-        Your Inventory
+        Your Portfolio
       </Typography>
       <Paper>
         <Table>
