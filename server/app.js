@@ -32,6 +32,14 @@ app.use('/action', actionRoutes);
 app.use('/history', historyRoutes);
 app.use('/profile', loginRoutes);
 
+// Hacky way around dreamhosts weird thing where all proxies requests seem to have an extra '/' in front of them
+app.use('//users', usersRoutes);
+app.use('//admin', adminRoutes);
+app.use('//prices',pricesRoutes);
+app.use('//holdings', holdingRoutes);
+app.use('//action', actionRoutes);
+app.use('//history', historyRoutes);
+app.use('//profile', loginRoutes);
 models.sequelize
   .authenticate()
   // .sync({force: true})
