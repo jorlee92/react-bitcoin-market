@@ -22,7 +22,7 @@ class CoinOptions extends Component {
     };
   }
   componentDidMount(){
-    Axios.get('/api/prices')
+    Axios.get('https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,XRP,LTC,EOS,BCH,USDT&tsyms=USD')
     .then(results => {
       //We want it to be an array so we can map over it.
       const itemsNew = Object.keys(results.data).map( key => {

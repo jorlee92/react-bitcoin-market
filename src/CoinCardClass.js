@@ -34,7 +34,10 @@ const styles = {
 class CoinCardClass extends Component {
     submitOrder(COIN_NAME, NUMBER){
         if(NUMBER > 0){
-            Axios.post('/api/action/buyCoin', { coin: COIN_NAME, amount: NUMBER})
+          let params = new URLSearchParams();
+          params.append('currencyName', COIN_NAME);
+          params.append('number', NUMBER);
+            Axios.post('/users/buyCoin', params)
             .then(result => { 
             console.log(result)
             this.setState({snackmsg: "Purchase Successful, reloading page", snackopen: true})

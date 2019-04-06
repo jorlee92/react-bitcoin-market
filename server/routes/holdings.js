@@ -7,7 +7,7 @@ global.fetch = require('node-fetch')
 
 router.get('/',(req, res) => {
         if(req.user){
-        const user_id = req.user.id; //Todo, dont hard code this, make it based on the session.
+        const user_id = req.user.id; 
         models.holding.findAll(
         { 
             attributes: [[models.sequelize.fn('sum', models.sequelize.col('quantity')), 'quantity']],

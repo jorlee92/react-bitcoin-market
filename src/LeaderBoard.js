@@ -36,14 +36,22 @@ class CoinHoldings extends Component {
     this.state = { board: [ ] }
   }
   async componentDidMount(){
-    const prices = await Axios.get('/api/prices').then( results => results.data );
-
-    Axios.get('/api/action/leaderBoard')
+    const prices = await Axios.get('https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,XRP,LTC,EOS,BCH,USDT&tsyms=USD')
+      .then( results => results.data).then(data => {
+        data.cash = {USD: 1};
+        return data;
+      });
+    Axios.get('/users/leaderboard')
     .then(results => {
+      console.log(prices)
       const keys = Object.keys(results.data);
-      const newBoard = keys.map(key => {
+      const newBoard = keys.map((key, idx) => {
         console.log(key);
-        const item = results.data[key];
+        const holdings = results.data[key];
+        const totalPortfolioValue = Object.keys(holdings).reduce((accumulator, key) => {
+            return accumulator + (prices[key].USD * holdings[key])
+        }, 0)
+        const item = {name: key, id: idx, totalPortfolioValue: totalPortfolioValue}
         return item;
       })
       console.log(newBoard)
@@ -71,7 +79,7 @@ class CoinHoldings extends Component {
           <TableBody>
              {this.state.board.map(row => (
               <TableRow key={row.id}>
-                <TableCell>{row.firstName}</TableCell>
+                <TableCell>{row.name}</TableCell>
                 <TableCell>{row.totalPortfolioValue}</TableCell>
               </TableRow>
             ))}

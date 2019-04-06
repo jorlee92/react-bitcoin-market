@@ -65,7 +65,10 @@ class CoinCardClass extends Component {
   render(){
     const { classes } = this.props;
     const submitLogin = (email, password) => {
-        Axios.post('/api/profile/login', { username: email, password: password})
+      let params = new URLSearchParams();
+      params.append('email', email);
+      params.append('password', password);
+        Axios.post('/users/login', params)
         .then(result => console.log(result)).then(() => {
             //We need to do a refresh because data is changed on the backend, but the page doesnt pull it again until a refresh.
             window.location = "/"

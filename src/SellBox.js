@@ -32,10 +32,10 @@ export default class FormDialog extends React.Component {
   handleSell = () => {
       console.log("Selling ", this.state.number, " units of ", this.props.name)
       this.handleClose();
-      Axios.post('/api/action/sellCoin', {
-          name: this.props.name,
-          quantity: this.state.number,
-      }).then(() => {
+      let params = new URLSearchParams();
+      params.append('currencyName', this.props.name);
+      params.append('number', this.state.number);
+      Axios.post('/users/sellCoin', params).then(() => {
           //Refresh the page
           this.setState({snackmsg: "Item Sold!, Reloading to update", snackopen: true})
           return new Promise(resolve => setTimeout(() => resolve(), 3000));

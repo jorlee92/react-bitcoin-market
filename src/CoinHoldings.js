@@ -24,16 +24,18 @@ class CoinHoldings extends Component {
     this.state = { holdings: [ ] }
   }
   async componentDidMount(){
-    const prices = await Axios.get('/api/prices').then( results => results.data );
+    const prices = await Axios.get('https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,XRP,LTC,EOS,BCH,USDT&tsyms=USD').then( results => results.data );
 
-    Axios.get('/api/holdings')
+    Axios.get('/users/holdings')
     .then(results => {
-      const newHoldings = results.data.map( (result,id) => {
-        const valueOfCoinHolding = prices[result.currency.name].USD * result.quantity;
+      const hkeys = Object.keys(results.data);
+      const newHoldings = hkeys.map( (name,id) => {
+        const currentResult = results.data[name];
+        const valueOfCoinHolding = prices[name].USD * currentResult;
         return {
           id: id,
-          name: result.currency.name,
-          quantity: result.quantity,
+          name: name,
+          quantity: currentResult,
           value: valueOfCoinHolding
         }
       })
