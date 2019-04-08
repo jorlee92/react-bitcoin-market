@@ -9,8 +9,12 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
+import Modal from '@material-ui/core/Modal';
+
 
 import Axios from 'axios';
+import TradeHistory from './TradeHistory';
+import TradeHistoryModal from './TradeHistoryModal';
 
 const styles = {
   holdingtable : {
@@ -33,7 +37,7 @@ const sortByAmount = (function makeSortByAmount(){
 class CoinHoldings extends Component {
   constructor(props){
     super(props);
-    this.state = { board: [ ] }
+    this.state = { board: [ ] , modalOpen: false, userSelected:null }
   }
   async componentDidMount(){
     const prices = await Axios.get('https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,XRP,LTC,EOS,BCH,USDT&tsyms=USD')
@@ -43,10 +47,8 @@ class CoinHoldings extends Component {
       });
     Axios.get('/users/leaderboard')
     .then(results => {
-      console.log(prices)
       const keys = Object.keys(results.data);
       const newBoard = keys.map((key, idx) => {
-        console.log(key);
         const holdings = results.data[key];
         const totalPortfolioValue = Object.keys(holdings).reduce((accumulator, key) => {
             return accumulator + (prices[key].USD * holdings[key])
@@ -54,9 +56,7 @@ class CoinHoldings extends Component {
         const item = {name: key, id: idx, totalPortfolioValue: totalPortfolioValue}
         return item;
       })
-      console.log(newBoard)
       sortByAmount(newBoard)
-      console.log(newBoard)
       this.setState({board: newBoard})
     })
   }
@@ -72,17 +72,21 @@ class CoinHoldings extends Component {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
+              <TableCell>ID</TableCell>
               <TableCell>Portfolio Value (Crypto and Cash)</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
              {this.state.board.map(row => (
-              <TableRow key={row.id}>
-                <TableCell>{row.name}</TableCell>
-                <TableCell>{row.totalPortfolioValue}</TableCell>
-              </TableRow>
+
+              <TradeHistoryModal 
+              id={row.id}
+              name={row.name}
+              totalPortfolioValue={row.totalPortfolioValue}
+              />
+              
             ))}
+
           </TableBody>
         </Table>
         </Paper>
